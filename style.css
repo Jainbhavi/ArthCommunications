@@ -661,8 +661,10 @@ select.form-control {
 body {
   background-image: url('background.jpg');
   background-size: cover;        /* Ensures the image covers the whole area */
-  background-position: center;   /* Centers the image */
-  background-repeat: no-repeat;  /* Prevents tiling */
+  background-position: center;    /* Centers the image */
+  background-repeat: no-repeat;
+  height: 100vh;               /* makes hero full screen */
+  width: 100%;/* Prevents tiling */
   background-color: #5a2d89;
   color: white;
   font-family: 'Segoe UI', Arial, sans-serif;
