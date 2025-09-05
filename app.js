@@ -173,29 +173,43 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function submitForm(data) {
-        const submitButton = contactForm.querySelector('button[type="submit"]');
-        const originalText = submitButton.textContent;
-        
-        // Show loading state
-        submitButton.classList.add('btn--loading');
-        submitButton.disabled = true;
-        
-        // Simulate form submission (replace with actual form submission logic)
-        setTimeout(() => {
-            // Reset button
-            submitButton.classList.remove('btn--loading');
-            submitButton.disabled = false;
-            submitButton.textContent = originalText;
-            
-            // Show success message
-            showSuccessMessage();
-            
-            // Reset form
-            contactForm.reset();
-            clearFormErrors();
-        }, 2000);
+    async function submitForm(data) {
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+
+    // Show loading state
+    submitButton.classList.add('btn--loading');
+    submitButton.disabled = true;
+
+    try {
+        // Call Netlify Function
+        const res = await fetch("/.netlify/functions/submit-contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (!res.ok || result.error) {
+            throw new Error(result.error || "Something went wrong");
+        }
+
+        // ✅ Success
+        showSuccessMessage();
+        contactForm.reset();
+        clearFormErrors();
+
+    } catch (err) {
+        console.error("Form submit error:", err);
+        showFieldError("message", err.message || "Unable to submit. Please try again.");
+    } finally {
+        // Reset button state
+        submitButton.classList.remove('btn--loading');
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
     }
+}
 
     function showSuccessMessage() {
         // Remove existing success message
