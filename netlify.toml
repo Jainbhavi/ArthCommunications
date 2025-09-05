@@ -1,0 +1,8 @@
+[functions]
+  directory = "netlify/functions"
+
+# Optional: pretty path like /api/submit-contact instead of /.netlify/functions/submit-contact
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
